@@ -247,37 +247,36 @@ if (smileModal) {
     });
 }
 
-// --- 6. SCRATCH CARD MECHANICS (AUTO-RESIZE CANVAS ENGINE) ---
+// --- 6. SCRATCH CARD MECHANICS (RESPONSIVE AUTO-RESIZE ENGINE) ---
 let scratchEventsAttached = false;
 
 function initScratchCard() {
     const wishCanvas = document.getElementById('wish-canvas');
     if (!wishCanvas) return;
 
-    const parent = wishCanvas.parentElement;
-    if (!parent) return;
+    // Use offsetWidth and offsetHeight of the visible element
+    const width = wishCanvas.offsetWidth;
+    const height = wishCanvas.offsetHeight;
 
-    // Fetch container computed dimensions
-    const rect = parent.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
+    if (width === 0 || height === 0) return;
 
-    // Set canvas dimensions explicitly to match letter container
-    wishCanvas.width = rect.width;
-    wishCanvas.height = rect.height;
+    // Set physical rendering resolution to match element display size
+    wishCanvas.width = width;
+    wishCanvas.height = height;
 
     const wCtx = wishCanvas.getContext('2d');
     
-    // Draw initial pink layer
+    // Draw initial pink cover layer
     wCtx.globalCompositeOperation = 'source-over';
     wCtx.fillStyle = '#FF69B4'; 
-    wCtx.fillRect(0, 0, wishCanvas.width, wishCanvas.height);
+    wCtx.fillRect(0, 0, width, height);
     
     // Overlay centered scratch text & icon
     wCtx.fillStyle = '#FFFFFF';
-    wCtx.font = 'bold 12px sans-serif';
+    wCtx.font = 'bold 13px sans-serif';
     wCtx.textAlign = 'center';
     wCtx.textBaseline = 'middle';
-    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', wishCanvas.width / 2, wishCanvas.height / 2);
+    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', width / 2, height / 2);
 
     if (scratchEventsAttached) return; 
     scratchEventsAttached = true;
