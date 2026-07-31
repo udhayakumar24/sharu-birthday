@@ -93,6 +93,15 @@
             0% { filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.4)); }
             100% { filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.9)); }
         }
+
+        /* Continuous bounce for finger pointer */
+        @keyframes horizontal-bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-6px); }
+        }
+        .animate-finger {
+            animation: horizontal-bounce 1s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
@@ -134,17 +143,11 @@
     <!-- 2. MAIN 3D STORYBOARD DRONE VIEWPORT (NO SCROLLING) -->
     <main id="storyboard" class="relative w-full h-full max-w-md mx-auto opacity-0 transition-opacity duration-1000">
         
-        <!-- Top Status Bar -->
+        <!-- Clean Top Status Bar -->
         <div class="absolute top-4 inset-x-0 px-4 flex justify-between items-center z-40">
-            <div class="flex items-center gap-1.5">
-                <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
-                    Chapter 1 of 6
-                </span>
-                <!-- ENVELOPE SMILE POPUP BUTTON -->
-                <button id="smile-btn" class="bg-gradient-to-r from-pink-500 to-rose-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm active:scale-95 transition-transform flex items-center gap-1">
-                    Smile 💌
-                </button>
-            </div>
+            <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
+                Chapter 1 of 6
+            </span>
             <button id="music-indicator" class="bg-white/80 backdrop-blur-md text-xs px-3 py-1 rounded-full text-pink-600 font-bold border border-pink-200 shadow-sm active:scale-95 transition-transform">
                 🎵 Music Playing...
             </button>
@@ -152,8 +155,19 @@
 
         <!-- CHAPTER 1: HER PHOTO & MAIN WISH -->
         <section class="story-card card-active" data-step="1">
+            
+            <!-- PROMINENT ENVELOPE SMILE BUTTON WITH BOUNCING FINGER POINTER -->
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-3xl animate-bounce">🌹</span>
+                <div class="relative flex items-center">
+                    <span class="text-lg animate-finger mr-1">👉</span>
+                    <button id="smile-btn" class="bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white animate-pulse active:scale-95 transition-transform flex items-center gap-1.5">
+                        Click Me 💌
+                    </button>
+                </div>
+            </div>
+
             <div class="text-center mb-2">
-                <span class="text-3xl">🌹</span>
                 <h1 class="text-2xl font-serif text-[#C71585] font-bold mt-1">HAPPY BIRTHDAY, SHARU MA!</h1>
                 <p class="text-[11px] tracking-wider text-[#FF1493] font-semibold mt-0.5">From your Kutty Paiyan ❤️</p>
             </div>
@@ -317,12 +331,4 @@
             <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-3">
                 <!-- Dynamically injected -->
             </p>
-            <button id="close-smile-btn" class="mt-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-transform">
-                Awww, Okay! 🥰
-            </button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+            <button id="clos
