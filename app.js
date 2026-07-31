@@ -68,13 +68,9 @@ function openGateway(e) {
     
     triggerHaptic([40, 30, 60]); 
 
-    if (droneTarget) {
-        droneTarget.classList.add('drone-zoom-active');
-    }
-
-    // Direct user-driven audio trigger (Bypasses browser autoplay restrictions)
+    // DIRECT USER-DRIVEN AUDIO TRIGGER (MUST RUN FIRST SYNCHRONOUSLY)
     if (bgMusic) {
-        bgMusic.currentTime = 0; // Start from beginning
+        bgMusic.muted = false;
         const playPromise = bgMusic.play();
         
         if (playPromise !== undefined) {
@@ -86,6 +82,46 @@ function openGateway(e) {
             });
         }
     }
+
+    if (droneTarget) {
+        droneTarget.classList.add('drone-zoom-active');
+    }
+
+    setTimeout(() => {
+        if (unlockOverlay) {
+            unlockOverlay.style.opacity = '0';
+            unlockOverlay.style.pointerEvents = 'none';
+        }
+        setTimeout(() => {
+            if (unlockOverlay) unlockOverlay.style.display = 'none';
+            if (storyboard) storyboard.classList.remove('opacity-0');
+        }, 800);
+    }, 1000);
+}
+
+// Attach listeners cleanly to preserve tap permissions on mobile
+if (unlockOverlay) {
+    unlockOverlay.addEventListener('click', openGateway);
+    unlockOverlay.addEventListener('touchstart', openGateway, { passive: false });
+}
+
+if (musicIndicator) {
+    musicIndicator.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerHaptic(15);
+        if (bgMusic) {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicIndicator.innerText = "🎵 Music Playing...";
+                });
+            } else {
+                bgMusic.pause();
+                musicIndicator.innerText = "🔇 Music Paused";
+            }
+        }
+    });
+}
+
 
     setTimeout(() => {
         if (unlockOverlay) {
