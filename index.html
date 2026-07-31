@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CSS CDN (Stable Mobile Build) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -20,7 +20,6 @@
         body {
             perspective: 1000px;
             overflow: hidden; /* No scrolling! Everything is 3D drone navigation */
-            touch-action: manipulation;
             transition: background 0.6s ease, color 0.6s ease;
         }
 
@@ -139,7 +138,7 @@
 <body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
 
     <!-- AMBIENT NIGHT / GLOW TOGGLE BUTTON -->
-    <button id="theme-toggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-2.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-pink-200 text-sm transition-all duration-300 active:scale-95">
+    <button id="theme-toggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-2.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-pink-200 text-sm transition-all duration-300 active:scale-95 cursor-pointer">
         <span id="theme-icon">🌙</span>
     </button>
     
@@ -152,7 +151,7 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 1. DRONE CAMERA GATEWAY OVERLAY (ENTIRE SCREEN IS CLICKABLE NOW) -->
+    <!-- 1. DRONE CAMERA GATEWAY OVERLAY (ENTIRE SCREEN IS CLICKABLE/TOUCHABLE NOW) -->
     <div id="unlock-overlay" class="fixed inset-0 z-50 bg-[#0B0205] text-white transition-opacity duration-1000 overflow-hidden cursor-pointer">
         <div class="absolute top-6 inset-x-0 text-center z-10 px-4 pointer-events-none">
             <span class="text-[10px] uppercase tracking-[0.3em] text-pink-300 font-semibold block">A Special Gift For Sharu Ma</span>
@@ -185,7 +184,7 @@
             <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
                 Chapter 1 of 6
             </span>
-            <button id="music-indicator" class="bg-white/80 backdrop-blur-md text-xs px-3 py-1 rounded-full text-pink-600 font-bold border border-pink-200 shadow-sm active:scale-95 transition-transform">
+            <button id="music-indicator" class="bg-white/80 backdrop-blur-md text-xs px-3 py-1 rounded-full text-pink-600 font-bold border border-pink-200 shadow-sm active:scale-95 transition-transform cursor-pointer">
                 🎵 Music Playing...
             </button>
         </div>
@@ -239,7 +238,7 @@
                             I still hope and pray that God brings us together so we can share a long, beautiful life side by side."
                         </p>
                     </div>
-                    <canvas id="wish-canvas" class="absolute inset-0 z-10 touch-none cursor-pointer"></canvas>
+                    <canvas id="wish-canvas" class="absolute inset-0 z-10 cursor-pointer"></canvas>
                 </div>
                 <p class="text-[10px] text-gray-400 mt-2 text-center">☝️ Rub the pink coating to reveal my letter</p>
             </div>
@@ -347,7 +346,8 @@
                 <div class="bg-pink-50/90 p-4 rounded-2xl border border-pink-200 shadow-inner space-y-2">
                     <span class="text-[10px] font-bold text-[#FF1493] uppercase tracking-wider block">⏳ Time Together</span>
                     <h4 class="text-xs font-bold text-[#C71585] font-serif">Every Second Since 19/07/2023</h4>
-              <div class="grid grid-cols-4 gap-1.5 pt-1">
+                    
+                    <div class="grid grid-cols-4 gap-1.5 pt-1">
                         <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
                             <span id="counter-days" class="text-base font-extrabold text-[#C71585] block">0</span>
                             <span class="text-[8px] uppercase font-bold text-gray-500">Days</span>
