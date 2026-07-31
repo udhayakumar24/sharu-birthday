@@ -452,3 +452,88 @@ if (micBtn) {
     });
 }
 
+// --- Love Meter Hold-to-Charge Feature ---
+const holdBtn = document.getElementById('love-hold-btn');
+const progressBar = document.getElementById('love-progress-bar');
+const percentageText = document.getElementById('love-percentage');
+
+let holdTimer = null;
+let loveProgress = 0;
+let isMaxed = false;
+
+function startCharging(e) {
+    if (e.cancelable) e.preventDefault(); // Prevents default touch hold menus
+    if (isMaxed) return;
+
+    // Start fill loop
+    holdTimer = setInterval(() => {
+        if (loveProgress < 1000) {
+            // Speed up as it gets higher
+            loveProgress += loveProgress > 100 ? 15 : 5;
+            
+            // Limit display percentage up to 1000%
+            const displayValue = Math.min(loveProgress, 1000);
+            progressBar.style.width = Math.min((loveProgress / 1000) * 100, 100) + '%';
+            percentageText.innerText = `${displayValue}%`;
+
+            // Mobile Haptic Vibrations (Increases intensity feel)
+            if (navigator.vibrate) {
+                navigator.vibrate(20);
+            }
+        } else {
+            // Max reached! Trigger overload event
+            triggerLoveOverload();
+        }
+    }, 40);
+}
+
+function stopCharging() {
+    if (isMaxed) return;
+    clearInterval(holdTimer);
+    
+    // Smoothly reset if released before 1000%
+    const resetInterval = setInterval(() => {
+        if (loveProgress > 0) {
+            loveProgress -= 25;
+            if (loveProgress < 0) loveProgress = 0;
+            progressBar.style.width = Math.min((loveProgress / 1000) * 100, 100) + '%';
+            percentageText.innerText = `${loveProgress}%`;
+        } else {
+            clearInterval(resetInterval);
+        }
+    }, 20);
+}
+
+function triggerLoveOverload() {
+    clearInterval(holdTimer);
+    isMaxed = true;
+    
+    percentageText.innerText = "1000% OVERLOAD! 💥❤️";
+    holdBtn.innerText = "♾️ INFINITE LOVE UNLOCKED! ♾️";
+    holdBtn.classList.remove('bg-pink-500');
+    holdBtn.classList.add('bg-gradient-to-r', 'from-red-500', 'to-yellow-500', 'animate-bounce');
+
+    // Heavy haptic burst
+    if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100, 50, 300]);
+    }
+
+    // Canvas Confetti Explosion
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 120,
+            spread: 90,
+            origin: { y: 0.7 },
+            colors: ['#ff007f', '#ff4500', '#ffd700']
+        });
+    }
+}
+
+// Event Listeners for Touch & Mouse
+if (holdBtn) {
+    holdBtn.addEventListener('touchstart', startCharging, { passive: false });
+    holdBtn.addEventListener('touchend', stopCharging);
+    holdBtn.addEventListener('mousedown', startCharging);
+    holdBtn.addEventListener('mouseup', stopCharging);
+    holdBtn.addEventListener('mouseleave', stopCharging);
+}
