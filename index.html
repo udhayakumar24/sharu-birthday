@@ -62,7 +62,7 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            padding-bottom: 5rem; /* Reserve bottom space for navigation buttons */
+            padding-bottom: 7rem; /* Extra clearance for elevated bottom buttons */
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out;
             will-change: transform, opacity;
             backface-visibility: hidden;
@@ -113,7 +113,7 @@
             <h2 class="text-lg font-serif text-rose-200 mt-0.5 font-bold">From Your Kutty Paiyan</h2>
         </div>
 
-        <div id="drone-target" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm h-[55vh] max-h-[420px] cursor-pointer origin-center transition-transform duration-300">
+        <div id="drone-target" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm h-[50vh] max-h-[380px] cursor-pointer origin-center transition-transform duration-300">
             <div class="w-full h-full rounded-3xl overflow-hidden relative shadow-2xl border border-pink-500/40">
                 <img src="udhaya.png" class="w-full h-full object-cover" alt="Udhaya" onerror="this.onerror=null; this.src='udhaya.jpg';">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div class="absolute bottom-10 inset-x-0 text-center z-10 px-4 pb-safe">
+        <div class="absolute bottom-12 inset-x-0 text-center z-10 px-4">
             <p class="text-[10px] text-pink-300/80 uppercase tracking-widest animate-pulse">✦ Touch the glowing heart above ✦</p>
         </div>
     </div>
@@ -153,7 +153,7 @@
             </div>
 
             <!-- EXPANDED FULL-SCREEN PHOTO FRAME WITH FULL VISIBILITY -->
-            <div class="w-[85vw] max-w-xs h-[42vh] max-h-[380px] bg-white p-2.5 rounded-3xl shadow-xl border border-pink-200 relative flex items-center justify-center my-2">
+            <div class="w-[82vw] max-w-xs h-[38vh] max-h-[340px] bg-white p-2.5 rounded-3xl shadow-xl border border-pink-200 relative flex items-center justify-center my-2">
                 <img id="sharu-img" src="sharu.png" class="w-full h-full object-contain rounded-2xl" alt="Sharu Ma">
                 <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white/95 border border-pink-200 px-3 py-0.5 text-[10px] uppercase font-bold text-pink-600 shadow-sm rounded-full">My Everything 💖</div>
             </div>
@@ -167,7 +167,7 @@
                 <span class="text-xs font-bold text-[#FF1493] uppercase">💌 Chapter 2</span>
                 <h3 class="text-lg font-bold text-[#C71585] font-serif mb-2">A Letter From My Heart</h3>
                 
-                <div class="relative w-full h-60 rounded-2xl overflow-hidden bg-[#FFF9FA] border border-pink-100 shadow-inner">
+                <div class="relative w-full h-56 rounded-2xl overflow-hidden bg-[#FFF9FA] border border-pink-100 shadow-inner">
                     <div class="absolute inset-0 flex flex-col justify-center p-4 text-left overflow-y-auto space-y-2">
                         <p class="text-[11px] text-gray-700 font-medium leading-relaxed italic">
                             "I met you back in our school days, my Pattu Ma—my very first love and my sweetest affection.
@@ -190,7 +190,7 @@
 
         <!-- CHAPTER 3: OUR TIMELINE -->
         <section class="story-card card-hidden-next" data-step="3">
-            <div class="w-full max-h-[68vh] overflow-y-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-left">
+            <div class="w-full max-h-[60vh] overflow-y-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-left">
                 <span class="text-xs font-bold text-[#FF1493] uppercase">⏱️ Chapter 3</span>
                 <h3 class="text-base font-bold text-[#C71585] font-serif mb-3">Our Beautiful Journey</h3>
                 
@@ -291,12 +291,12 @@
             </div>
         </section>
 
-        <!-- ELEVATED BOTTOM DRONE NAVIGATION CONTROLS -->
-        <div class="absolute bottom-10 inset-x-0 px-6 flex justify-between items-center z-40" style="padding-bottom: env(safe-area-inset-bottom, 12px);">
-            <button id="prev-btn" class="bg-white/90 backdrop-blur-md text-pink-600 font-bold px-4 py-3 rounded-full text-xs shadow-md border border-pink-200 opacity-40 pointer-events-none active:scale-95 transition-all">
+        <!-- LIFTED NAVIGATION CONTROLS (HIGH POSITION) -->
+        <div class="absolute bottom-16 inset-x-0 px-6 flex justify-between items-center z-40">
+            <button id="prev-btn" class="bg-white/90 backdrop-blur-md text-pink-600 font-bold px-5 py-3 rounded-full text-xs shadow-md border border-pink-200 opacity-40 pointer-events-none active:scale-95 transition-all">
                 ← Back
             </button>
-            <button id="next-btn" class="bg-gradient-to-r from-[#FF1493] to-[#C71585] text-white font-bold px-6 py-3 rounded-full text-xs shadow-xl active:scale-95 transition-transform flex items-center gap-1">
+            <button id="next-btn" class="bg-gradient-to-r from-[#FF1493] to-[#C71585] text-white font-bold px-7 py-3 rounded-full text-xs shadow-xl active:scale-95 transition-transform flex items-center gap-1">
                 Next Chapter ➔
             </button>
         </div>
