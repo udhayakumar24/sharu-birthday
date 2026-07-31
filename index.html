@@ -12,6 +12,7 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
     <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -28,6 +29,7 @@
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
+        
         .petal {
             position: fixed;
             top: -10px;
@@ -35,11 +37,13 @@
             animation: fall linear infinite;
             z-index: 30;
         }
+
         @keyframes float-butterfly {
             0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 0; }
             50% { opacity: 0.8; }
             100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
         }
+
         .butterfly {
             position: fixed;
             pointer-events: none;
@@ -93,6 +97,7 @@
         .heart-pulse {
             animation: heartGlow 2s infinite alternate ease-in-out;
         }
+
         @keyframes heartGlow {
             0% { filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.4)); }
             100% { filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.9)); }
@@ -103,6 +108,7 @@
             0%, 100% { transform: translateX(0); }
             50% { transform: translateX(-6px); }
         }
+
         .animate-finger {
             animation: horizontal-bounce 1s infinite ease-in-out;
         }
@@ -129,7 +135,9 @@
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
+
     <!-- AMBIENT NIGHT / GLOW TOGGLE BUTTON -->
     <button id="theme-toggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-2.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-pink-200 text-sm transition-all duration-300 active:scale-95">
         <span id="theme-icon">🌙</span>
@@ -339,5 +347,4 @@
                 <div class="bg-pink-50/90 p-4 rounded-2xl border border-pink-200 shadow-inner space-y-2">
                     <span class="text-[10px] font-bold text-[#FF1493] uppercase tracking-wider block">⏳ Time Together</span>
                     <h4 class="text-xs font-bold text-[#C71585] font-serif">Every Second Since 19/07/2023</h4>
-                    
-             
+              
