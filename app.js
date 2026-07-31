@@ -537,3 +537,79 @@ if (holdBtn) {
     holdBtn.addEventListener('mouseup', stopCharging);
     holdBtn.addEventListener('mouseleave', stopCharging);
 }
+// ==========================================
+// CHAPTER 4: CATCH ME IF YOU CAN GAME LOGIC
+// ==========================================
+function initDodgingGame() {
+    const noBtn = document.getElementById('no-btn');
+    const yesBtn = document.getElementById('yes-btn');
+    const arena = document.getElementById('game-arena');
+    const hintText = document.getElementById('game-hint');
+
+    if (!noBtn || !yesBtn || !arena) return;
+
+    let dodgeCount = 0;
+    const hints = [
+        "Nice try! Too slow! ⚡",
+        "Oops! Almost got it! 🤪",
+        "Nope, not allowed! 🙈",
+        "Just click YES already! ❤️",
+        "I can dodge this all day! 🏃‍♂️",
+        "No isn't an option, Sharu Ma! 🥰"
+    ];
+
+    function dodge(e) {
+        // Prevent default touch scrolling when tapping on mobile
+        if (e.type === 'touchstart') e.preventDefault();
+
+        // Calculate maximum distances so the button stays inside the card
+        const arenaBounds = arena.getBoundingClientRect();
+        const btnBounds = noBtn.getBoundingClientRect();
+
+        const maxX = (arenaBounds.width / 2) - (btnBounds.width / 2) - 10;
+        const maxY = (arenaBounds.height / 2) - (btnBounds.height / 2) - 5;
+
+        // Random coordinates
+        const randomX = (Math.random() * (maxX * 2)) - maxX;
+        const randomY = (Math.random() * (maxY * 2)) - maxY;
+
+        noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+        // Mobile haptic vibration feedback
+        if ('vibrate' in navigator) {
+            navigator.vibrate(25);
+        }
+
+        // Cycle through teasing hints
+        if (hintText) {
+            hintText.innerText = hints[dodgeCount % hints.length];
+        }
+        dodgeCount++;
+    }
+
+    // Attach dodging event listeners for mobile touch & desktop mouse
+    noBtn.addEventListener('touchstart', dodge);
+    noBtn.addEventListener('mouseover', dodge);
+    noBtn.addEventListener('click', dodge);
+
+    // YES Button Action
+    yesBtn.addEventListener('click', () => {
+        if ('vibrate' in navigator) {
+            navigator.vibrate([50, 50, 100]);
+        }
+        
+        // Trigger canvas-confetti if loaded
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        alert("I knew it! 100% correct answer, Sharu Ma! 🥰❤️✨");
+    });
+}
+
+// Call function when DOM loaded
+document.addEventListener('DOMContentLoaded', initDodgingGame);
