@@ -62,7 +62,7 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-function openGateway() {
+function openGateway(e) {
     if (gatewayTriggered) return;
     gatewayTriggered = true;
     
@@ -72,13 +72,16 @@ function openGateway() {
         droneTarget.classList.add('drone-zoom-active');
     }
 
+    // Direct user-driven audio trigger (Bypasses browser autoplay restrictions)
     if (bgMusic) {
-        let playPromise = bgMusic.play();
+        bgMusic.currentTime = 0; // Start from beginning
+        const playPromise = bgMusic.play();
+        
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
             }).catch(err => {
-                console.log("Autoplay restricted:", err);
+                console.log("Audio play blocked by browser:", err);
                 if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
             });
         }
@@ -96,6 +99,7 @@ function openGateway() {
     }, 1000);
 }
 
+// Attach both click and touchstart events directly for immediate mobile response
 if (unlockOverlay) {
     unlockOverlay.addEventListener('click', openGateway);
     unlockOverlay.addEventListener('touchstart', openGateway, { passive: true });
