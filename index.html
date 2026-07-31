@@ -294,22 +294,50 @@
             </div>
         </section>
 
-        <!-- CHAPTER 6: FOREVER & ALWAYS -->
+                <!-- CHAPTER 6: FOREVER & ALWAYS + LIVE COUNTER -->
         <section class="story-card card-hidden-next" data-step="6">
-            <div class="w-full bg-gradient-to-b from-white to-pink-50 border border-pink-200 p-6 rounded-3xl shadow-xl text-center space-y-3">
-                <span class="text-4xl">♾️</span>
-                <span class="text-xs font-bold text-pink-600 uppercase block">Chapter 6</span>
-                <h4 class="text-lg font-bold text-[#C71585] font-serif">To Be Continued...</h4>
+            <div class="w-full max-h-[68vh] overflow-y-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-center space-y-4">
                 
-                <p class="text-xs text-gray-700 leading-relaxed font-medium px-2">
-                    "This chapter doesn't end here... there is so much more left to go! I want to fall for you more and more every single day."
-                </p>
-
-                <div class="pt-4 border-t border-pink-200/80">
-                    <p class="text-sm font-serif font-bold text-[#FF1493]">"I love you forever, Sharu Ma! ❤️"</p>
+                <div>
+                    <span class="text-xs font-bold text-[#FF1493] uppercase">✨ Chapter 6</span>
+                    <h3 class="text-xl font-bold text-[#C71585] font-serif mt-1 mb-2">Forever & Always</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed italic">
+                        "Through every laugh, every long conversation, every smile, and every little moment—you make my world brighter every single day, Sharu Ma."
+                    </p>
                 </div>
+
+                <!-- DYNAMIC LIVE TIME COUNTER BLOCK -->
+                <div class="bg-pink-50/90 p-4 rounded-2xl border border-pink-200 shadow-inner space-y-2">
+                    <span class="text-[10px] font-bold text-[#FF1493] uppercase tracking-wider block">⏳ Time Together</span>
+                    <h4 class="text-xs font-bold text-[#C71585] font-serif">Every Second Since 19/07/2023</h4>
+                    
+                    <div class="grid grid-cols-4 gap-1.5 pt-1">
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-days" class="text-base font-extrabold text-[#C71585] block">0</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Days</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-hours" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Hours</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-mins" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Mins</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-secs" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Secs</span>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-gray-500 italic pt-1">
+                        ...and counting every single moment with you! ❤️
+                    </p>
+                </div>
+
             </div>
         </section>
+
 
         <!-- LIFTED NAVIGATION CONTROLS (HIGH POSITION) -->
         <div class="absolute bottom-16 inset-x-0 px-6 flex justify-between items-center z-40">
