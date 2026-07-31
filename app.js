@@ -284,3 +284,34 @@ function initScratchCard() {
     wishCanvas.addEventListener('touchend', () => isScratching = false);
     wishCanvas.addEventListener('touchmove', rub);
 }
+// --- LIVE TIME TOGETHER COUNTER ENGINE ---
+const START_DATE = new Date('2023-07-19T00:00:00'); // 19th July 2023
+
+function updateCounter() {
+    const daysEl = document.getElementById('counter-days');
+    const hoursEl = document.getElementById('counter-hours');
+    const minsEl = document.getElementById('counter-mins');
+    const secsEl = document.getElementById('counter-secs');
+
+    if (!daysEl) return;
+
+    const now = new Date();
+    const diffInMs = now - START_DATE;
+
+    if (diffInMs < 0) return;
+
+    const totalSeconds = Math.floor(diffInMs / 1000);
+    const days = Math.floor(totalSeconds / (3600 * 24));
+    const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    daysEl.innerText = days;
+    hoursEl.innerText = String(hours).padStart(2, '0');
+    minsEl.innerText = String(minutes).padStart(2, '0');
+    secsEl.innerText = String(seconds).padStart(2, '0');
+}
+
+// Run immediately and tick every second
+updateCounter();
+setInterval(updateCounter, 1000);
