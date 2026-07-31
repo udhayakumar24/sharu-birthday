@@ -424,7 +424,7 @@ if (micBtn) {
             analyser.connect(javascriptNode);
             javascriptNode.connect(audioContext.destination);
 
-            micBtn.innerText = "🎙️ Super..Oothunga ippo!";
+            micBtn.innerText = "🎙️ Super.front cam paathu Oothunga ippo!";
             micBtn.classList.add('bg-emerald-100', 'text-emerald-700');
 
             javascriptNode.onaudioprocess = () => {
@@ -441,7 +441,7 @@ if (micBtn) {
                 // Threshold check for blowing wind sound into mic
                 if (average > 18 && !candleBlown) {
                     extinguishCandle();
-                    micBtn.innerText = "✨ Wish Granted!";
+                    micBtn.innerText = "✨ Wish Granted pattu!";
                     stream.getTracks().forEach(track => track.stop()); // Stop mic recording
                 }
             };
