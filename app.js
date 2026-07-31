@@ -90,16 +90,7 @@ droneTarget.addEventListener('click', () => {
         }, 800);
     }, 1000);
 }
-
-// Attach touchstart without { passive: true } to preserve user gesture execution for Chrome
-if (unlockOverlay) {
-    unlockOverlay.addEventListener('click', openGateway);
-    unlockOverlay.addEventListener('touchstart', (e) => {
-        // e.preventDefault() here stops ghost clicks while preserving the play gesture
-        openGateway(e);
-    });
-}
-
+                             
 if (musicIndicator) {
     musicIndicator.addEventListener('click', () => {
         triggerHaptic(15);
