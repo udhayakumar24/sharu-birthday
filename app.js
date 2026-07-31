@@ -89,12 +89,9 @@ function openGateway() {
     }, 1200);
 }
 
+// Unified listener: Works for both mobile taps & desktop clicks seamlessly
 if (unlockOverlay) {
     unlockOverlay.addEventListener('click', openGateway);
-    unlockOverlay.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        openGateway();
-    });
 }
 
 if (musicIndicator) {
@@ -272,7 +269,6 @@ function initScratchCard() {
 
     function rub(e) {
         if (!isScratching) return;
-        if (e.cancelable) e.preventDefault(); // Prevent touch-scrolling while scratching
 
         const now = Date.now();
         if (now - lastVibrateTime > 120) {
@@ -295,7 +291,7 @@ function initScratchCard() {
     wishCanvas.addEventListener('mousemove', rub);
     wishCanvas.addEventListener('touchstart', (e) => { isScratching = true; rub(e); });
     wishCanvas.addEventListener('touchend', () => isScratching = false);
-    wishCanvas.addEventListener('touchmove', rub, { passive: false });
+    wishCanvas.addEventListener('touchmove', rub);
 }
 
 // --- 7. LIVE TIME TOGETHER COUNTER ENGINE ---
@@ -369,4 +365,4 @@ function triggerConfetti() {
             });
         }, 250);
     }
-        }
+}
