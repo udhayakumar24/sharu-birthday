@@ -132,9 +132,44 @@
         body.dark-glow p {
             color: #e0d0d8 !important;
         }
+                /* -------------------------------------------------- */
+        /* FLOATING AMBIENT HEARTS FOR FRONT PAGE BACKGROUND  */
+        /* -------------------------------------------------- */
+        .heart-particle {
+            position: absolute;
+            bottom: -10%;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: floatUp 8s infinite ease-in-out;
+            z-index: 1; /* Sits softly behind main content */
+        }
+
+        .heart-1 { left: 10%; animation-delay: 0s; font-size: 1rem; }
+        .heart-2 { left: 25%; animation-delay: 2.5s; font-size: 1.4rem; }
+        .heart-3 { left: 50%; animation-delay: 5s; font-size: 0.9rem; }
+        .heart-4 { left: 70%; animation-delay: 1.2s; font-size: 1.3rem; }
+        .heart-5 { left: 85%; animation-delay: 4s; font-size: 1.1rem; }
+        .heart-6 { left: 40%; animation-delay: 6.5s; font-size: 1.5rem; }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.4; /* Subtle soft glow */
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-115vh) scale(1.2) rotate(25deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
-
+    
 <body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
 
     <!-- AMBIENT NIGHT / GLOW TOGGLE BUTTON -->
@@ -188,7 +223,16 @@
                 🎵 Music Playing...
             </button>
         </div>
-
+<!-- Ambient Floating Background Hearts -->
+<div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="heart-particle heart-1">💖</div>
+    <div class="heart-particle heart-2">✨</div>
+    <div class="heart-particle heart-3">🌸</div>
+    <div class="heart-particle heart-4">💕</div>
+    <div class="heart-particle heart-5">💖</div>
+    <div class="heart-particle heart-6">✨</div>
+</div>
+        
         <!-- CHAPTER 1: HER PHOTO & MAIN WISH -->
         <section class="story-card card-active" data-step="1">
             
