@@ -614,19 +614,29 @@ function initDodgingGame() {
 // Call function when DOM loaded
 document.addEventListener('DOMContentLoaded', initDodgingGame);
 
+// Function to handle opening any card
 function openCard(cardNumber, reasonText) {
   const modal = document.getElementById('proposal-modal');
   const reasonDisplay = document.getElementById('selected-reason');
 
-  reasonDisplay.innerText = `Card #${cardNumber}: "${reasonText}"`;
+  // Display the specific reason she picked
+  reasonDisplay.innerText = `You Picked Card #${cardNumber}: "${reasonText}"`;
+
+  // Reveal the modal with a smooth fade in
   modal.classList.remove('hidden');
 
+  // Optional: Trigger phone vibration if supported
   if (navigator.vibrate) {
-    navigator.vibrate([80, 40, 80]);
+    navigator.vibrate([100, 50, 100]);
   }
 }
 
+// Function when she clicks YES on the proposal modal
 function acceptProposal(message) {
+  // Trigger sweet alert or celebration effects!
   alert(message);
-  document.getElementById('proposal-modal').classList.add('hidden');
+
+  // Close modal or trigger confetti here!
+  const modal = document.getElementById('proposal-modal');
+  modal.classList.add('hidden');
 }
