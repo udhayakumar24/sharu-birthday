@@ -4,7 +4,7 @@ function triggerHaptic(pattern = 20) {
         try {
             navigator.vibrate(pattern);
         } catch (e) {
-            console.log('Vibration blocked by browser policy');
+            console.log('Vibration blocked');
         }
     }
 }
@@ -62,8 +62,7 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-function openGateway(e) {
-    if (e) e.preventDefault();
+function openGateway() {
     if (gatewayTriggered) return;
     gatewayTriggered = true;
     
@@ -73,15 +72,13 @@ function openGateway(e) {
         droneTarget.classList.add('drone-zoom-active');
     }
 
-    setTimeout(() => {
-        if (bgMusic) {
-            bgMusic.play().then(() => {
-                if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
-            }).catch(err => {
-                if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
-            });
-        }
-    }, 150);
+    if (bgMusic) {
+        bgMusic.play().then(() => {
+            if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
+        }).catch(err => {
+            if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
+        });
+    }
 
     setTimeout(() => {
         if (unlockOverlay) unlockOverlay.style.opacity = '0';
@@ -93,9 +90,13 @@ function openGateway(e) {
     }, 1200);
 }
 
-if (droneTarget) {
-    droneTarget.addEventListener('touchstart', openGateway, { passive: false });
-    droneTarget.addEventListener('click', openGateway);
+// Attach listener directly to the entire overlay screen for instant reaction on mobile touch or click
+if (unlockOverlay) {
+    unlockOverlay.addEventListener('click', openGateway);
+    unlockOverlay.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        openGateway();
+    });
 }
 
 if (musicIndicator) {
@@ -212,7 +213,6 @@ function openSmileModal(e) {
 
 if (smileBtn) {
     smileBtn.addEventListener('click', openSmileModal);
-    smileBtn.addEventListener('touchstart', openSmileModal);
 }
 
 if (closeSmileBtn) {
