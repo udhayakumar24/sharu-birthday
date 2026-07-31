@@ -240,32 +240,40 @@ if (smileModal) {
     });
 }
 
-// --- 6. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
+// --- 6. SCRATCH CARD MECHANICS (RESPONSIVE CANVAS RE-INITIALIZER) ---
 let scratchInited = false;
+
 function initScratchCard() {
     const wishCanvas = document.getElementById('wish-canvas');
     if (!wishCanvas) return;
 
-    const rect = wishCanvas.parentElement.getBoundingClientRect();
+    const parent = wishCanvas.parentElement;
+    if (!parent) return;
+
+    // Reset dimensions dynamically to match the exact parent container size
+    const rect = parent.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
     wishCanvas.width = rect.width;
     wishCanvas.height = rect.height;
 
-    if (scratchInited) return;
-    scratchInited = true;
-
     const wCtx = wishCanvas.getContext('2d');
     let isScratching = false;
     let lastVibrateTime = 0;
 
+    // Draw scratch layer cover
     wCtx.fillStyle = '#FF69B4'; 
     wCtx.fillRect(0, 0, wishCanvas.width, wishCanvas.height);
     
+    // Canvas overlay text & icon styling
     wCtx.fillStyle = '#FFFFFF';
-    wCtx.font = 'bold 12px sans-serif';
+    wCtx.font = 'bold 13px sans-serif';
     wCtx.textAlign = 'center';
-    wCtx.fillText('SCRATCH TO READ MY LETTER', wishCanvas.width / 2, wishCanvas.height / 2);
+    wCtx.textBaseline = 'middle';
+    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', wishCanvas.width / 2, wishCanvas.height / 2);
+
+    if (scratchInited) return; // Attach event listeners only once
+    scratchInited = true;
 
     function rub(e) {
         if (!isScratching) return;
