@@ -347,4 +347,61 @@
                 <div class="bg-pink-50/90 p-4 rounded-2xl border border-pink-200 shadow-inner space-y-2">
                     <span class="text-[10px] font-bold text-[#FF1493] uppercase tracking-wider block">⏳ Time Together</span>
                     <h4 class="text-xs font-bold text-[#C71585] font-serif">Every Second Since 19/07/2023</h4>
-              
+              <div class="grid grid-cols-4 gap-1.5 pt-1">
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-days" class="text-base font-extrabold text-[#C71585] block">0</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Days</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-hours" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Hours</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-mins" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Mins</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
+                            <span id="counter-secs" class="text-base font-extrabold text-[#C71585] block">00</span>
+                            <span class="text-[8px] uppercase font-bold text-gray-500">Secs</span>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-gray-500 italic pt-1">
+                        ...and counting every single moment with you! ❤️
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- LIFTED NAVIGATION CONTROLS (HIGH POSITION) -->
+        <div class="absolute bottom-16 inset-x-0 px-6 flex justify-between items-center z-40">
+            <button id="prev-btn" class="bg-white/90 backdrop-blur-md text-pink-600 font-bold px-5 py-3 rounded-full text-xs shadow-md border border-pink-200 opacity-40 pointer-events-none active:scale-95 transition-all cursor-pointer">
+                ← Back
+            </button>
+            <button id="next-btn" class="bg-gradient-to-r from-[#FF1493] to-[#C71585] text-white font-bold px-7 py-3 rounded-full text-xs shadow-xl active:scale-95 transition-transform flex items-center gap-1 cursor-pointer">
+                Next Chapter ➔
+            </button>
+        </div>
+
+    </main>
+
+    <!-- DAILY SMILE ENVELOPE MODAL POPUP -->
+    <div id="smile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 px-6">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl border-2 border-pink-300 text-center max-w-xs w-full transform scale-90 transition-transform duration-300" id="smile-card">
+            <span class="text-3xl block mb-2 animate-bounce">💌</span>
+            <h4 class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-2">Message from Kutty Paiyan</h4>
+            <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-3">
+            <!-- Dynamically injected -->
+            </p>
+            <button id="close-smile-btn" class="mt-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-transform cursor-pointer">
+                Awww, Okay! 🥰
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
+    <script src="app.js"></script>
+
+</body>
+</html>
