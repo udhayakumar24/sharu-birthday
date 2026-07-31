@@ -73,32 +73,25 @@ function openGateway() {
     }
 
     if (bgMusic) {
-        let playPromise = bgMusic.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
-            }).catch(err => {
-                console.log("Autoplay restricted:", err);
-                if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
-            });
-        }
+        bgMusic.play().then(() => {
+            if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
+        }).catch(err => {
+            if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
+        });
     }
 
     setTimeout(() => {
-        if (unlockOverlay) {
-            unlockOverlay.style.opacity = '0';
-            unlockOverlay.style.pointerEvents = 'none';
-        }
+        if (unlockOverlay) unlockOverlay.style.opacity = '0';
         setTimeout(() => {
             if (unlockOverlay) unlockOverlay.style.display = 'none';
             if (storyboard) storyboard.classList.remove('opacity-0');
         }, 800);
-    }, 1000);
+    }, 1200);
 }
 
+// Unified listener: Works for both mobile taps & desktop clicks seamlessly
 if (unlockOverlay) {
     unlockOverlay.addEventListener('click', openGateway);
-    unlockOverlay.addEventListener('touchstart', openGateway, { passive: true });
 }
 
 if (musicIndicator) {
@@ -159,9 +152,9 @@ function updateDroneView() {
         }
     }
 
-    // Initialize/Resize scratch card when transitioning into Chapter 2
+    // Initialize scratch card when navigating to Chapter 2
     if (currentStep === 2) {
-        setTimeout(initScratchCard, 350);
+        setTimeout(initScratchCard, 300);
     }
 
     // Trigger confetti burst when user hits Chapter 6
@@ -247,43 +240,32 @@ if (smileModal) {
     });
 }
 
-// --- 6. SCRATCH CARD MECHANICS (AUTO-RESIZE CANVAS ENGINE) ---
-let scratchEventsAttached = false;
-
+// --- 6. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
+let scratchInited = false;
 function initScratchCard() {
     const wishCanvas = document.getElementById('wish-canvas');
     if (!wishCanvas) return;
 
-    const parent = wishCanvas.parentElement;
-    if (!parent) return;
-
-    // Fetch container computed dimensions
-    const rect = parent.getBoundingClientRect();
+    const rect = wishCanvas.parentElement.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
-    // Set canvas dimensions explicitly to match letter container
     wishCanvas.width = rect.width;
     wishCanvas.height = rect.height;
 
+    if (scratchInited) return;
+    scratchInited = true;
+
     const wCtx = wishCanvas.getContext('2d');
-    
-    // Draw initial pink layer
-    wCtx.globalCompositeOperation = 'source-over';
+    let isScratching = false;
+    let lastVibrateTime = 0;
+
     wCtx.fillStyle = '#FF69B4'; 
     wCtx.fillRect(0, 0, wishCanvas.width, wishCanvas.height);
     
-    // Overlay centered scratch text & icon
     wCtx.fillStyle = '#FFFFFF';
     wCtx.font = 'bold 12px sans-serif';
     wCtx.textAlign = 'center';
-    wCtx.textBaseline = 'middle';
-    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', wishCanvas.width / 2, wishCanvas.height / 2);
-
-    if (scratchEventsAttached) return; 
-    scratchEventsAttached = true;
-
-    let isScratching = false;
-    let lastVibrateTime = 0;
+    wCtx.fillText('SCRATCH TO READ MY LETTER', wishCanvas.width / 2, wishCanvas.height / 2);
 
     function rub(e) {
         if (!isScratching) return;
@@ -307,9 +289,9 @@ function initScratchCard() {
     wishCanvas.addEventListener('mousedown', () => isScratching = true);
     wishCanvas.addEventListener('mouseup', () => isScratching = false);
     wishCanvas.addEventListener('mousemove', rub);
-    wishCanvas.addEventListener('touchstart', (e) => { isScratching = true; rub(e); }, { passive: true });
+    wishCanvas.addEventListener('touchstart', (e) => { isScratching = true; rub(e); });
     wishCanvas.addEventListener('touchend', () => isScratching = false);
-    wishCanvas.addEventListener('touchmove', rub, { passive: true });
+    wishCanvas.addEventListener('touchmove', rub);
 }
 
 // --- 7. LIVE TIME TOGETHER COUNTER ENGINE ---
@@ -384,3 +366,4 @@ function triggerConfetti() {
         }, 250);
     }
 }
+    
