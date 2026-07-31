@@ -85,12 +85,10 @@ function openGateway() {
         setTimeout(() => {
             if (unlockOverlay) unlockOverlay.style.display = 'none';
             if (storyboard) storyboard.classList.remove('opacity-0');
-            initScratchCard();
         }, 800);
     }, 1200);
 }
 
-// Attach listener directly to the entire overlay screen for instant reaction on mobile touch or click
 if (unlockOverlay) {
     unlockOverlay.addEventListener('click', openGateway);
     unlockOverlay.addEventListener('touchend', (e) => {
@@ -155,6 +153,11 @@ function updateDroneView() {
         } else {
             nextBtn.innerText = "Next Chapter ➔";
         }
+    }
+
+    // Initialize scratch card when navigating to Chapter 2
+    if (currentStep === 2) {
+        setTimeout(initScratchCard, 300);
     }
 
     // Trigger confetti burst when user hits Chapter 6
@@ -243,18 +246,22 @@ if (smileModal) {
 // --- 6. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
 let scratchInited = false;
 function initScratchCard() {
-    if (scratchInited) return;
     const wishCanvas = document.getElementById('wish-canvas');
     if (!wishCanvas) return;
+
+    const rect = wishCanvas.parentElement.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    wishCanvas.width = rect.width;
+    wishCanvas.height = rect.height;
+
+    if (scratchInited) return;
     scratchInited = true;
 
     const wCtx = wishCanvas.getContext('2d');
     let isScratching = false;
     let lastVibrateTime = 0;
 
-    wishCanvas.width = wishCanvas.parentElement.offsetWidth;
-    wishCanvas.height = wishCanvas.parentElement.offsetHeight;
-    
     wCtx.fillStyle = '#FF69B4'; 
     wCtx.fillRect(0, 0, wishCanvas.width, wishCanvas.height);
     
@@ -265,6 +272,7 @@ function initScratchCard() {
 
     function rub(e) {
         if (!isScratching) return;
+        if (e.cancelable) e.preventDefault(); // Prevent touch-scrolling while scratching
 
         const now = Date.now();
         if (now - lastVibrateTime > 120) {
@@ -287,11 +295,11 @@ function initScratchCard() {
     wishCanvas.addEventListener('mousemove', rub);
     wishCanvas.addEventListener('touchstart', (e) => { isScratching = true; rub(e); });
     wishCanvas.addEventListener('touchend', () => isScratching = false);
-    wishCanvas.addEventListener('touchmove', rub);
+    wishCanvas.addEventListener('touchmove', rub, { passive: false });
 }
 
 // --- 7. LIVE TIME TOGETHER COUNTER ENGINE ---
-const START_DATE = new Date('2023-07-19T00:00:00'); // 19th July 2023
+const START_DATE = new Date('2023-07-19T00:00:00'); 
 
 function updateCounter() {
     const daysEl = document.getElementById('counter-days');
@@ -322,18 +330,20 @@ updateCounter();
 setInterval(updateCounter, 1000);
 
 // --- 8. AMBIENT NIGHT / GLOW TOGGLE LOGIC ---
-function toggleTheme() {
+window.toggleTheme = function() {
     const body = document.body;
     const themeIcon = document.getElementById('theme-icon');
     
     body.classList.toggle('dark-glow');
     
-    if (body.classList.contains('dark-glow')) {
-        themeIcon.textContent = '☀️';
-    } else {
-        themeIcon.textContent = '🌙';
+    if (themeIcon) {
+        if (body.classList.contains('dark-glow')) {
+            themeIcon.textContent = '☀️';
+        } else {
+            themeIcon.textContent = '🌙';
+        }
     }
-}
+};
 
 // --- 9. CELEBRATION CONFETTI TRIGGER ---
 function triggerConfetti() {
@@ -359,4 +369,4 @@ function triggerConfetti() {
             });
         }, 250);
     }
-}
+        }
