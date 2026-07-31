@@ -136,9 +136,15 @@
         
         <!-- Top Status Bar -->
         <div class="absolute top-4 inset-x-0 px-4 flex justify-between items-center z-40">
-            <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
-                Chapter 1 of 6
-            </span>
+            <div class="flex items-center gap-1.5">
+                <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
+                    Chapter 1 of 6
+                </span>
+                <!-- ENVELOPE SMILE POPUP BUTTON -->
+                <button id="smile-btn" class="bg-gradient-to-r from-pink-500 to-rose-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm active:scale-95 transition-transform flex items-center gap-1">
+                    Smile 💌
+                </button>
+            </div>
             <button id="music-indicator" class="bg-white/80 backdrop-blur-md text-xs px-3 py-1 rounded-full text-pink-600 font-bold border border-pink-200 shadow-sm active:scale-95 transition-transform">
                 🎵 Music Playing...
             </button>
@@ -302,6 +308,20 @@
         </div>
 
     </main>
+
+    <!-- DAILY SMILE ENVELOPE MODAL POPUP -->
+    <div id="smile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 px-6">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl border-2 border-pink-300 text-center max-w-xs w-full transform scale-90 transition-transform duration-300" id="smile-card">
+            <span class="text-3xl block mb-2 animate-bounce">💌</span>
+            <h4 class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-2">Message from Kutty Paiyan</h4>
+            <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-3">
+                <!-- Dynamically injected -->
+            </p>
+            <button id="close-smile-btn" class="mt-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-transform">
+                Awww, Okay! 🥰
+            </button>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
