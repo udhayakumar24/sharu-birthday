@@ -640,3 +640,154 @@ function acceptProposal(message) {
   const modal = document.getElementById('proposal-modal');
   modal.classList.add('hidden');
 }
+// Game Variables
+let dashScore = 0;
+let dashTime = 20;
+let gameInterval, timerInterval, spawnInterval;
+let cartPosition = 50; // Percentage from left (0 to 100)
+const itemsList = [
+  { emoji: '🍗', points: 10, type: 'good' },
+  { emoji: '🍦', points: 10, type: 'good' },
+  { emoji: '🌹', points: 10, type: 'good' },
+  { emoji: '🐍', points: -15, type: 'bad' },
+  { emoji: '🌩️', points: -10, type: 'bad' }
+];
+
+// Start Game Function
+function startShoppingDash() {
+  // Reset state
+  dashScore = 0;
+  dashTime = 20;
+  cartPosition = 50;
+  
+  document.getElementById('dash-score').innerText = dashScore;
+  document.getElementById('dash-timer').innerText = dashTime;
+  document.getElementById('dash-start-overlay').classList.add('hidden');
+  document.getElementById('dash-win-overlay').classList.add('hidden');
+  
+  // Clear old spawned items if replaying
+  const container = document.getElementById('game-container');
+  const oldItems = container.querySelectorAll('.falling-item');
+  oldItems.forEach(item => item.remove());
+
+  updateCartPosition();
+
+  // Intervals
+  clearInterval(gameInterval);
+  clearInterval(timerInterval);
+  clearInterval(spawnInterval);
+
+  spawnInterval = setInterval(spawnItem, 600);
+  timerInterval = setInterval(() => {
+    dashTime--;
+    document.getElementById('dash-timer').innerText = dashTime;
+    if (dashTime <= 0) {
+      endShoppingDash(false);
+    }
+  }, 1000);
+
+  gameInterval = setInterval(gameLoop, 50);
+}
+
+// Move Cart Controls
+function moveCart(direction) {
+  if (direction === 'left' && cartPosition > 10) {
+    cartPosition -= 12;
+  } else if (direction === 'right' && cartPosition < 90) {
+    cartPosition += 12;
+  }
+  updateCartPosition();
+}
+
+function updateCartPosition() {
+  const cart = document.getElementById('player-cart');
+  cart.style.left = `${cartPosition}%`;
+}
+
+// Controls Listeners (Touch & Keys)
+document.getElementById('btn-left').addEventListener('click', () => moveCart('left'));
+document.getElementById('btn-right').addEventListener('click', () => moveCart('right'));
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') moveCart('left');
+  if (e.key === 'ArrowRight') moveCart('right');
+});
+
+// Spawn Falling Items
+function spawnItem() {
+  const container = document.getElementById('game-container');
+  const randomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
+  
+  const itemEl = document.createElement('div');
+  itemEl.className = 'falling-item absolute text-2xl select-none transition-all';
+  itemEl.innerText = randomItem.emoji;
+  itemEl.dataset.type = randomItem.type;
+  itemEl.dataset.points = randomItem.points;
+  
+  // Random horizontal spawn position (10% to 90%)
+  const randomLeft = Math.floor(Math.random() * 80) + 10;
+  itemEl.style.left = `${randomLeft}%`;
+  itemEl.style.top = '0px';
+
+  container.appendChild(itemEl);
+}
+
+// Main Physics / Collision Loop
+function gameLoop() {
+  const container = document.getElementById('game-container');
+  const cart = document.getElementById('player-cart');
+  const items = container.querySelectorAll('.falling-item');
+
+  const cartRect = cart.getBoundingClientRect();
+
+  items.forEach(item => {
+    let top = parseFloat(item.style.top) || 0;
+    top += 5; // Falling speed
+    item.style.top = `${top}px`;
+
+    const itemRect = item.getBoundingClientRect();
+
+    // Collision Detection
+    if (
+      itemRect.bottom >= cartRect.top &&
+      itemRect.top <= cartRect.bottom &&
+      itemRect.right >= cartRect.left &&
+      itemRect.left <= cartRect.right
+    ) {
+      // Trigger Haptic Feedback on mobile if supported
+      if (navigator.vibrate) navigator.vibrate(50);
+
+      dashScore += parseInt(item.dataset.points);
+      if (dashScore < 0) dashScore = 0;
+      
+      document.getElementById('dash-score').innerText = dashScore;
+      item.remove();
+
+      // Check Win Condition
+      if (dashScore >= 100) {
+        endShoppingDash(true);
+      }
+    }
+
+    // Remove if item falls off screen
+    if (top > container.clientHeight) {
+      item.remove();
+    }
+  });
+}
+
+// End Game
+function endShoppingDash(isWin) {
+  clearInterval(gameInterval);
+  clearInterval(timerInterval);
+  clearInterval(spawnInterval);
+
+  if (isWin) {
+    // If you have canvas-confetti library integrated, call it here!
+    if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
+    document.getElementById('dash-win-overlay').classList.remove('hidden');
+  } else {
+    alert("Time's up! Let's try again for a perfect score! 💕");
+    startShoppingDash();
+  }
+}
