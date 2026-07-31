@@ -52,8 +52,7 @@ if (sharuImg) {
         }
     };
 }
-
-// --- 3. GATEWAY DRONE UNLOCK ENGINE ---
+// --- 3. GATEWAY DRONE UNLOCK ---
 const droneTarget = document.getElementById('drone-target');
 const unlockOverlay = document.getElementById('unlock-overlay');
 const storyboard = document.getElementById('storyboard');
@@ -62,48 +61,32 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-function openGateway(e) {
+droneTarget.addEventListener('click', () => {
     if (gatewayTriggered) return;
     gatewayTriggered = true;
-    
-    triggerHaptic([40, 30, 60]); 
+    triggerHaptic(50); // Stronger haptic feedback on opening unlock
 
-    // DIRECT USER-DRIVEN AUDIO TRIGGER (MUST RUN FIRST SYNCHRONOUSLY)
-    if (bgMusic) {
-        bgMusic.muted = false;
-        const playPromise = bgMusic.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
-            }).catch(err => {
-                console.log("Audio play blocked by browser:", err);
-                if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
-            });
-        }
-    }
-
-    if (droneTarget) {
+    requestAnimationFrame(() => {
         droneTarget.classList.add('drone-zoom-active');
-    }
+    });
 
     setTimeout(() => {
-        if (unlockOverlay) {
-            unlockOverlay.style.opacity = '0';
-            unlockOverlay.style.pointerEvents = 'none';
-        }
-        setTimeout(() => {
-            if (unlockOverlay) unlockOverlay.style.display = 'none';
-            if (storyboard) storyboard.classList.remove('opacity-0');
-        }, 800);
-    }, 1000);
-}
+        bgMusic.play().then(() => {
+            musicIndicator.innerText = "🎵 Music Playing...";
+        }).catch(err => {
+            musicIndicator.innerText = "🔇 Tap to Play Song";
+        });
+    }, 150);
 
-// Attach listeners cleanly to preserve tap permissions on mobile
-if (unlockOverlay) {
-    unlockOverlay.addEventListener('click', openGateway);
-    unlockOverlay.addEventListener('touchstart', openGateway, { passive: false });
-}
+    setTimeout(() => {
+        unlockOverlay.style.opacity = '0';
+        setTimeout(() => {
+            unlockOverlay.style.display = 'none';
+            storyboard.classList.remove('opacity-0');
+            initScratchCard();
+        }, 800);
+    }, 1200);
+});
 
 if (musicIndicator) {
     musicIndicator.addEventListener('click', (e) => {
