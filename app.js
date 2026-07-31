@@ -1,7 +1,11 @@
 // --- HAPTIC FEEDBACK HELPER (MOBILE VIBRATION) ---
-function triggerHaptic(duration = 20) {
-    if (navigator.vibrate) {
-        navigator.vibrate(duration);
+function triggerHaptic(pattern = 20) {
+    if ('vibrate' in navigator) {
+        try {
+            navigator.vibrate(pattern);
+        } catch (e) {
+            console.log('Vibration blocked by browser policy');
+        }
     }
 }
 
@@ -10,6 +14,7 @@ const petalContainer = document.getElementById('petal-container');
 const butterflyContainer = document.getElementById('butterfly-container');
 
 function spawnPetal() {
+    if (!petalContainer) return;
     const petal = document.createElement('div');
     petal.className = 'petal';
     petal.innerText = Math.random() > 0.5 ? '🌸' : '🌹';
@@ -22,6 +27,7 @@ function spawnPetal() {
 setInterval(spawnPetal, 400);
 
 function spawnButterfly() {
+    if (!butterflyContainer) return;
     const bf = document.createElement('div');
     bf.className = 'butterfly';
     bf.innerText = '🦋';
@@ -56,43 +62,53 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-droneTarget.addEventListener('click', () => {
-    if (gatewayTriggered) return;
-    gatewayTriggered = true;
-    triggerHaptic(50); // Stronger haptic feedback on opening unlock
+if (droneTarget) {
+    droneTarget.addEventListener('click', () => {
+        if (gatewayTriggered) return;
+        gatewayTriggered = true;
+        
+        // Haptic pulse sequence [vibrate, pause, vibrate]
+        triggerHaptic([40, 30, 60]); 
 
-    requestAnimationFrame(() => {
-        droneTarget.classList.add('drone-zoom-active');
-    });
-
-    setTimeout(() => {
-        bgMusic.play().then(() => {
-            musicIndicator.innerText = "🎵 Music Playing...";
-        }).catch(err => {
-            musicIndicator.innerText = "🔇 Tap to Play Song";
+        requestAnimationFrame(() => {
+            droneTarget.classList.add('drone-zoom-active');
         });
-    }, 150);
 
-    setTimeout(() => {
-        unlockOverlay.style.opacity = '0';
         setTimeout(() => {
-            unlockOverlay.style.display = 'none';
-            storyboard.classList.remove('opacity-0');
-            initScratchCard();
-        }, 800);
-    }, 1200);
-});
+            if (bgMusic) {
+                bgMusic.play().then(() => {
+                    if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
+                }).catch(err => {
+                    if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
+                });
+            }
+        }, 150);
 
-musicIndicator.addEventListener('click', () => {
-    triggerHaptic(15);
-    if (bgMusic.paused) {
-        bgMusic.play();
-        musicIndicator.innerText = "🎵 Music Playing...";
-    } else {
-        bgMusic.pause();
-        musicIndicator.innerText = "🔇 Music Paused";
-    }
-});
+        setTimeout(() => {
+            if (unlockOverlay) unlockOverlay.style.opacity = '0';
+            setTimeout(() => {
+                if (unlockOverlay) unlockOverlay.style.display = 'none';
+                if (storyboard) storyboard.classList.remove('opacity-0');
+                initScratchCard();
+            }, 800);
+        }, 1200);
+    });
+}
+
+if (musicIndicator) {
+    musicIndicator.addEventListener('click', () => {
+        triggerHaptic(15);
+        if (bgMusic) {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicIndicator.innerText = "🎵 Music Playing...";
+            } else {
+                bgMusic.pause();
+                musicIndicator.innerText = "🔇 Music Paused";
+            }
+        }
+    });
+}
 
 // --- 4. 3D DRONE STORYBOARD NAVIGATION ENGINE ---
 const cards = document.querySelectorAll('.story-card');
@@ -117,43 +133,51 @@ function updateDroneView(direction) {
         }
     });
 
-    stepCounter.innerText = `Chapter ${currentStep} of ${totalSteps}`;
+    if (stepCounter) stepCounter.innerText = `Chapter ${currentStep} of ${totalSteps}`;
 
     // Update buttons
-    if (currentStep === 1) {
-        prevBtn.style.opacity = '0.4';
-        prevBtn.style.pointerEvents = 'none';
-    } else {
-        prevBtn.style.opacity = '1';
-        prevBtn.style.pointerEvents = 'auto';
+    if (prevBtn) {
+        if (currentStep === 1) {
+            prevBtn.style.opacity = '0.4';
+            prevBtn.style.pointerEvents = 'none';
+        } else {
+            prevBtn.style.opacity = '1';
+            prevBtn.style.pointerEvents = 'auto';
+        }
     }
 
-    if (currentStep === totalSteps) {
-        nextBtn.innerText = "Replay Story 🔄";
-    } else {
-        nextBtn.innerText = "Next Chapter ➔";
+    if (nextBtn) {
+        if (currentStep === totalSteps) {
+            nextBtn.innerText = "Replay Story 🔄";
+        } else {
+            nextBtn.innerText = "Next Chapter ➔";
+        }
     }
 }
 
-nextBtn.addEventListener('click', () => {
-    triggerHaptic(25);
-    if (currentStep < totalSteps) {
-        currentStep++;
-    } else {
-        currentStep = 1; // Restart loop
-    }
-    updateDroneView('next');
-});
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+        triggerHaptic(30);
+        if (currentStep < totalSteps) {
+            currentStep++;
+        } else {
+            currentStep = 1; // Restart loop
+        }
+        updateDroneView('next');
+    });
+}
 
-prevBtn.addEventListener('click', () => {
-    triggerHaptic(25);
-    if (currentStep > 1) {
-        currentStep--;
-        updateDroneView('prev');
-    }
-});
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+        triggerHaptic(20);
+        if (currentStep > 1) {
+            currentStep--;
+            updateDroneView('prev');
+        }
+    });
+}
 
-// --- 5. SCRATCH CARD MECHANICS WITH AUTO-BURST CONFETTI ---
+// --- 5. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
 let scratchInited = false;
 function initScratchCard() {
     if (scratchInited) return;
@@ -163,6 +187,7 @@ function initScratchCard() {
 
     const wCtx = wishCanvas.getContext('2d');
     let isScratching = false;
+    let lastVibrateTime = 0;
 
     wishCanvas.width = wishCanvas.parentElement.offsetWidth;
     wishCanvas.height = wishCanvas.parentElement.offsetHeight;
@@ -177,7 +202,13 @@ function initScratchCard() {
 
     function rub(e) {
         if (!isScratching) return;
-        triggerHaptic(5);
+
+        // Throttle scratch vibration to max once every 120ms to avoid breaking OS vibration queue
+        const now = Date.now();
+        if (now - lastVibrateTime > 120) {
+            triggerHaptic(15);
+            lastVibrateTime = now;
+        }
         
         const bounds = wishCanvas.getBoundingClientRect();
         const posX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -196,4 +227,3 @@ function initScratchCard() {
     wishCanvas.addEventListener('touchend', () => isScratching = false);
     wishCanvas.addEventListener('touchmove', rub);
 }
-
