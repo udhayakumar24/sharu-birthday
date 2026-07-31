@@ -62,23 +62,28 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-droneTarget.addEventListener('click', () => {
+function openGateway() {
     if (gatewayTriggered) return;
     gatewayTriggered = true;
-    triggerHaptic(50); // Stronger haptic feedback on opening unlock
-
-    requestAnimationFrame(() => {
-        droneTarget.classList.add('drone-zoom-active');
-    });
-
-    setTimeout(() => {
-        bgMusic.play().then(() => {
-            musicIndicator.innerText = "🎵 Music Playing...";
-        }).catch(err => {
-            musicIndicator.innerText = "🔇 Tap to Play Song";
-        });
-    }, 150);
     
+    triggerHaptic([40, 30, 60]); 
+
+    if (droneTarget) {
+        droneTarget.classList.add('drone-zoom-active');
+    }
+
+    if (bgMusic) {
+        let playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
+            }).catch(err => {
+                console.log("Autoplay restricted:", err);
+                if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
+            });
+        }
+    }
+
     setTimeout(() => {
         if (unlockOverlay) {
             unlockOverlay.style.opacity = '0';
@@ -90,7 +95,12 @@ droneTarget.addEventListener('click', () => {
         }, 800);
     }, 1000);
 }
-                             
+
+if (unlockOverlay) {
+    unlockOverlay.addEventListener('click', openGateway);
+    unlockOverlay.addEventListener('touchstart', openGateway, { passive: true });
+}
+
 if (musicIndicator) {
     musicIndicator.addEventListener('click', () => {
         triggerHaptic(15);
@@ -237,36 +247,37 @@ if (smileModal) {
     });
 }
 
-// --- 6. SCRATCH CARD MECHANICS (RESPONSIVE AUTO-RESIZE ENGINE) ---
+// --- 6. SCRATCH CARD MECHANICS (AUTO-RESIZE CANVAS ENGINE) ---
 let scratchEventsAttached = false;
 
 function initScratchCard() {
     const wishCanvas = document.getElementById('wish-canvas');
     if (!wishCanvas) return;
 
-    // Use offsetWidth and offsetHeight of the visible element
-    const width = wishCanvas.offsetWidth;
-    const height = wishCanvas.offsetHeight;
+    const parent = wishCanvas.parentElement;
+    if (!parent) return;
 
-    if (width === 0 || height === 0) return;
+    // Fetch container computed dimensions
+    const rect = parent.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
 
-    // Set physical rendering resolution to match element display size
-    wishCanvas.width = width;
-    wishCanvas.height = height;
+    // Set canvas dimensions explicitly to match letter container
+    wishCanvas.width = rect.width;
+    wishCanvas.height = rect.height;
 
     const wCtx = wishCanvas.getContext('2d');
     
-    // Draw initial pink cover layer
+    // Draw initial pink layer
     wCtx.globalCompositeOperation = 'source-over';
     wCtx.fillStyle = '#FF69B4'; 
-    wCtx.fillRect(0, 0, width, height);
+    wCtx.fillRect(0, 0, wishCanvas.width, wishCanvas.height);
     
     // Overlay centered scratch text & icon
     wCtx.fillStyle = '#FFFFFF';
-    wCtx.font = 'bold 13px sans-serif';
+    wCtx.font = 'bold 12px sans-serif';
     wCtx.textAlign = 'center';
     wCtx.textBaseline = 'middle';
-    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', width / 2, height / 2);
+    wCtx.fillText('SCRATCH TO READ MY LETTER 🌸', wishCanvas.width / 2, wishCanvas.height / 2);
 
     if (scratchEventsAttached) return; 
     scratchEventsAttached = true;
