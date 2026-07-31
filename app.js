@@ -315,3 +315,44 @@ function updateCounter() {
 // Run immediately and tick every second
 updateCounter();
 setInterval(updateCounter, 1000);
+// --- AMBIENT NIGHT / GLOW TOGGLE LOGIC ---
+function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+    
+    body.classList.toggle('dark-glow');
+    
+    if (body.classList.contains('dark-glow')) {
+        themeIcon.textContent = '☀️';
+    } else {
+        themeIcon.textContent = '🌙';
+    }
+}
+
+// --- CELEBRATION CONFETTI TRIGGER ---
+function triggerConfetti() {
+    if (typeof confetti === 'function') {
+        // First burst
+        confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+        
+        // Optional second burst 250ms later for extra celebration effect
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+        }, 250);
+    }
+}
