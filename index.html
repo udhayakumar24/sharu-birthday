@@ -12,14 +12,15 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <!-- Canvas Confetti Library -->
+    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-</head>
+
     <style>
         body {
             perspective: 1000px;
             overflow: hidden; /* No scrolling! Everything is 3D drone navigation */
             touch-action: manipulation;
+            transition: background 0.6s ease, color 0.6s ease;
         }
 
         /* Ambient floating petals & butterflies */
@@ -105,12 +106,8 @@
         .animate-finger {
             animation: horizontal-bounce 1s infinite ease-in-out;
         }
-    </style>
-            /* AMBIENT NIGHT / GLOW TRANSITIONS */
-        body {
-            transition: background 0.6s ease, color 0.6s ease;
-        }
 
+        /* AMBIENT NIGHT / GLOW TRANSITIONS */
         body.dark-glow {
             background: radial-gradient(circle at center, #1a0814 0%, #0b0205 100%) !important;
         }
@@ -130,13 +127,13 @@
         body.dark-glow p {
             color: #e0d0d8 !important;
         }
-    
+    </style>
 </head>
 <body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
-<!-- AMBIENT NIGHT / GLOW TOGGLE BUTTON -->
-<button id="theme-toggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-2.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-pink-200 text-sm transition-all duration-300 active:scale-95">
-    <span id="theme-icon">🌙</span>
-</button>
+    <!-- AMBIENT NIGHT / GLOW TOGGLE BUTTON -->
+    <button id="theme-toggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-2.5 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-pink-200 text-sm transition-all duration-300 active:scale-95">
+        <span id="theme-icon">🌙</span>
+    </button>
     
     <!-- BACKGROUND EFFECTS -->
     <div id="petal-container"></div>
@@ -326,7 +323,7 @@
             </div>
         </section>
 
-                <!-- CHAPTER 6: FOREVER & ALWAYS + LIVE COUNTER -->
+        <!-- CHAPTER 6: FOREVER & ALWAYS + LIVE COUNTER -->
         <section class="story-card card-hidden-next" data-step="6">
             <div class="w-full max-h-[68vh] overflow-y-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-center space-y-4">
                 
@@ -343,62 +340,4 @@
                     <span class="text-[10px] font-bold text-[#FF1493] uppercase tracking-wider block">⏳ Time Together</span>
                     <h4 class="text-xs font-bold text-[#C71585] font-serif">Every Second Since 19/07/2023</h4>
                     
-                    <div class="grid grid-cols-4 gap-1.5 pt-1">
-                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
-                            <span id="counter-days" class="text-base font-extrabold text-[#C71585] block">0</span>
-                            <span class="text-[8px] uppercase font-bold text-gray-500">Days</span>
-                        </div>
-                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
-                            <span id="counter-hours" class="text-base font-extrabold text-[#C71585] block">00</span>
-                            <span class="text-[8px] uppercase font-bold text-gray-500">Hours</span>
-                        </div>
-                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
-                            <span id="counter-mins" class="text-base font-extrabold text-[#C71585] block">00</span>
-                            <span class="text-[8px] uppercase font-bold text-gray-500">Mins</span>
-                        </div>
-                        <div class="bg-white p-2 rounded-xl border border-pink-100 shadow-sm">
-                            <span id="counter-secs" class="text-base font-extrabold text-[#C71585] block">00</span>
-                            <span class="text-[8px] uppercase font-bold text-gray-500">Secs</span>
-                        </div>
-                    </div>
-
-                    <p class="text-[10px] text-gray-500 italic pt-1">
-                        ...and counting every single moment with you! ❤️
-                    </p>
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- LIFTED NAVIGATION CONTROLS (HIGH POSITION) -->
-        <div class="absolute bottom-16 inset-x-0 px-6 flex justify-between items-center z-40">
-            <button id="prev-btn" class="bg-white/90 backdrop-blur-md text-pink-600 font-bold px-5 py-3 rounded-full text-xs shadow-md border border-pink-200 opacity-40 pointer-events-none active:scale-95 transition-all cursor-pointer">
-                ← Back
-            </button>
-            <button id="next-btn" class="bg-gradient-to-r from-[#FF1493] to-[#C71585] text-white font-bold px-7 py-3 rounded-full text-xs shadow-xl active:scale-95 transition-transform flex items-center gap-1 cursor-pointer">
-                Next Chapter ➔
-            </button>
-        </div>
-
-    </main>
-
-    <!-- DAILY SMILE ENVELOPE MODAL POPUP -->
-    <div id="smile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 px-6">
-        <div class="bg-white p-6 rounded-3xl shadow-2xl border-2 border-pink-300 text-center max-w-xs w-full transform scale-90 transition-transform duration-300" id="smile-card">
-            <span class="text-3xl block mb-2 animate-bounce">💌</span>
-            <h4 class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-2">Message from Kutty Paiyan</h4>
-            <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-3">
-            <!-- Dynamically injected -->
-            </p>
-            <button id="close-smile-btn" class="mt-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-transform cursor-pointer">
-                Awww, Okay! 🥰
-            </button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
-
-              
+             
