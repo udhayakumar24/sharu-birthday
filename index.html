@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Sharu ma!</title>
+    
+    <!-- Mobile Browser Aesthetic Polish -->
+    <meta name="theme-color" content="#FFF0F5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            perspective: 1000px;
+            overflow: hidden; /* No scrolling! Everything is 3D drone navigation */
+            touch-action: manipulation;
+        }
+
+        /* Ambient floating petals & butterflies */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        .petal {
+            position: fixed;
+            top: -10px;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 30;
+        }
+        @keyframes float-butterfly {
+            0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
+        }
+        .butterfly {
+            position: fixed;
+            pointer-events: none;
+            animation: float-butterfly linear infinite;
+            z-index: 25;
+        }
+
+        /* HARDWARE ACCELERATED GATEWAY ZOOM */
+        .drone-zoom-active {
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease-in, filter 1.5s ease-in !important;
+            transform: translate(-50%, -50%) scale(5) !important;
+            filter: blur(10px);
+            opacity: 0 !important;
+            will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+        }
+
+        /* 3D DRONE SLIDE TRANSITIONS */
+        .story-card {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .card-hidden-next {
+            transform: scale(0.3) translateZ(-400px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card-hidden-prev {
+            transform: scale(2.5) translateZ(400px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card-active {
+            transform: scale(1) translateZ(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .heart-pulse {
+            animation: heartGlow 2s infinite alternate ease-in-out;
+        }
+        @keyframes heartGlow {
+            0% { filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.4)); }
+            100% { filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.9)); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#FFF0F5] to-[#FFE4E1] font-sans antialiased select-none text-gray-800 h-screen w-screen overflow-hidden">
+
+    <!-- BACKGROUND EFFECTS -->
+    <div id="petal-container"></div>
+    <div id="butterfly-container"></div>
+
+    <!-- BACKGROUND MUSIC ENGINE -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 1. DRONE CAMERA GATEWAY OVERLAY -->
+    <div id="unlock-overlay" class="fixed inset-0 z-50 bg-[#0B0205] text-white transition-opacity duration-1000 overflow-hidden">
+        <div class="absolute top-6 inset-x-0 text-center z-10 px-4">
+            <span class="text-[10px] uppercase tracking-[0.3em] text-pink-300 font-semibold block">A Special Gift For Sharu Ma</span>
+            <h2 class="text-lg font-serif text-rose-200 mt-0.5 font-bold">From Your Kutty Paiyan</h2>
+        </div>
+
+        <div id="drone-target" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm h-[60vh] max-h-[460px] cursor-pointer origin-center transition-transform duration-300">
+            <div class="w-full h-full rounded-3xl overflow-hidden relative shadow-2xl border border-pink-500/40">
+                <img src="udhaya.png" class="w-full h-full object-cover" alt="Udhaya" onerror="this.onerror=null; this.src='udhaya.jpg';">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <div class="absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-2 border-dashed border-pink-400/80 flex items-center justify-center heart-pulse pointer-events-none">
+                    <span class="text-2xl animate-ping">💖</span>
+                </div>
+                <div class="absolute bottom-5 inset-x-0 text-center px-4 pointer-events-none">
+                    <p class="text-xs text-pink-200 font-serif italic">"Touch my heart to fly into our world..."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-6 inset-x-0 text-center z-10 px-4">
+            <p class="text-[10px] text-pink-300/80 uppercase tracking-widest animate-pulse">✦ Touch the glowing heart above ✦</p>
+        </div>
+    </div>
+
+    <!-- 2. MAIN 3D STORYBOARD DRONE VIEWPORT (NO SCROLLING) -->
+    <main id="storyboard" class="relative w-full h-full max-w-md mx-auto opacity-0 transition-opacity duration-1000">
+        
+        <!-- Top Status Bar -->
+        <div class="absolute top-4 inset-x-0 px-4 flex justify-between items-center z-40">
+            <span id="step-counter" class="text-xs font-bold text-[#C71585] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-pink-200">
+                Chapter 1 of 6
+            </span>
+            <button id="music-indicator" class="bg-white/80 backdrop-blur-md text-xs px-3 py-1 rounded-full text-pink-600 font-bold border border-pink-200 shadow-sm active:scale-95 transition-transform">
+                🎵 Music Playing...
+            </button>
+        </div>
+
+        <!-- CHAPTER 1: HER PHOTO & MAIN WISH -->
+        <section class="story-card card-active" data-step="1">
+            <div class="text-center mb-2">
+                <span class="text-3xl">🌹</span>
+                <h1 class="text-2xl font-serif text-[#C71585] font-bold mt-1">HAPPY BIRTHDAY, SHARU MA!</h1>
+                <p class="text-[11px] tracking-wider text-[#FF1493] font-semibold mt-0.5">From your Kutty Paiyan ❤️</p>
+            </div>
+
+            <!-- EXPANDED FULL-SCREEN PHOTO FRAME WITH FULL VISIBILITY -->
+            <div class="w-[88vw] max-w-xs h-[48vh] max-h-[420px] bg-white p-2.5 rounded-3xl shadow-xl border border-pink-200 relative flex items-center justify-center my-2">
+                <img id="sharu-img" src="sharu.jpg" class="w-full h-full object-contain rounded-2xl" alt="Sharu Ma">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white/95 border border-pink-200 px-3 py-0.5 text-[10px] uppercase font-bold text-pink-600 shadow-sm rounded-full">My Everything 💖</div>
+            </div>
+
+            <p class="text-xs text-gray-600 italic mt-1 px-4 text-center">"Every single moment spent with you is my favorite memory..."</p>
+        </section>
+
+        <!-- CHAPTER 2: SCRATCH CARD LOVE LETTER -->
+        <section class="story-card card-hidden-next" data-step="2">
+            <div class="w-full bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200">
+                <span class="text-xs font-bold text-[#FF1493] uppercase">💌 Chapter 2</span>
+                <h3 class="text-lg font-bold text-[#C71585] font-serif mb-2">A Letter From My Heart</h3>
+                
+                <div class="relative w-full h-64 rounded-2xl overflow-hidden bg-[#FFF9FA] border border-pink-100 shadow-inner">
+                    <div class="absolute inset-0 flex flex-col justify-center p-4 text-left overflow-y-auto space-y-2">
+                        <p class="text-[11px] text-gray-700 font-medium leading-relaxed italic">
+                            "I met you back in our school days, my Pattu Ma—my very first love and my sweetest affection.
+                        </p>
+                        <p class="text-[11px] text-gray-700 font-medium leading-relaxed italic">
+                            Everything about that time felt like magic, and honestly, I’ve been living in that moment ever since. From that first day until now, I find myself looking for you in every single moment.
+                        </p>
+                        <p class="text-[11px] text-gray-700 font-medium leading-relaxed italic">
+                            I genuinely pray that life gives you everything you deserve, smoothly and without any obstacles. My soul belongs to you, always and forever.
+                        </p>
+                        <p class="text-[11px] text-gray-700 font-medium leading-relaxed italic font-semibold text-rose-800">
+                            I still hope and pray that God brings us together so we can share a long, beautiful life side by side."
+                        </p>
+                    </div>
+                    <canvas id="wish-canvas" class="absolute inset-0 z-10 touch-none cursor-pointer"></canvas>
+                </div>
+                <p class="text-[10px] text-gray-400 mt-2 text-center">☝️ Rub the pink coating to reveal my letter</p>
+            </div>
+        </section>
+
+        <!-- CHAPTER 3: OUR TIMELINE -->
+        <section class="story-card card-hidden-next" data-step="3">
+            <div class="w-full max-h-[82vh] overflow-y-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-left">
+                <span class="text-xs font-bold text-[#FF1493] uppercase">⏱️ Chapter 3</span>
+                <h3 class="text-base font-bold text-[#C71585] font-serif mb-3">Our Beautiful Journey</h3>
+                
+                <div class="border-l-2 border-pink-300 ml-1.5 space-y-3.5">
+                    <div class="relative pl-4">
+                        <div class="absolute w-2.5 h-2.5 bg-pink-500 rounded-full -left-[5px] top-1"></div>
+                        <span class="text-[10px] font-bold text-[#FF1493] block">16/07/2023 — First Chat in Email</span>
+                        <p class="text-[11px] text-gray-600 italic">Searching for my pattu ma 🤓</p>
+                    </div>
+                    
+                    <div class="relative pl-4">
+                        <div class="absolute w-2.5 h-2.5 bg-pink-500 rounded-full -left-[5px] top-1"></div>
+                        <span class="text-[10px] font-bold text-[#FF1493] block">19/07/2023 — First Email Chain Replies</span>
+                        <p class="text-[11px] text-gray-600 italic">"Yes, I got your email, the reply from my pattu ma feels like I received a message directly from heaven!"</p>
+                    </div>
+
+                    <div class="relative pl-4">
+                        <div class="absolute w-2.5 h-2.5 bg-pink-500 rounded-full -left-[5px] top-1"></div>
+                        <span class="text-[10px] font-bold text-[#FF1493] block">Daily Conversations</span>
+                        <p class="text-[11px] text-gray-600 italic">Sharp morning messages and evening replies, shared memories, shared numbers... and pattu nyabagam iruka, ne ennaku apo tha "Kutty Paiyan" nu name vecha! 🤩</p>
+                    </div>
+
+                    <div class="relative pl-4">
+                        <div class="absolute w-2.5 h-2.5 bg-pink-500 rounded-full -left-[5px] top-1"></div>
+                        <span class="text-[10px] font-bold text-[#FF1493] block">10/07/2024 — First Meeting</span>
+                        <p class="text-[11px] text-gray-600 italic">"I finally found my Sharu Ma again, and honestly, words aren't enough to capture how I feel. I still can't believe I actually got to speak with you that day. Seeing my Pattu Ma again for the first time—looking so bright, radiant, and just like a bride—was pure magic! 😍"</p>
+                    </div>
+
+                    <div class="relative pl-4">
+                        <div class="absolute w-2.5 h-2.5 bg-pink-500 rounded-full -left-[5px] top-1"></div>
+                        <span class="text-[10px] font-bold text-[#FF1493] block">27/03/2025 — First Voice Call</span>
+                        <p class="text-[11px] text-gray-600 italic">Where I expressed my feelings to you openly and talked to you for more than an hour! 😂🤭</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAPTER 4: WHY I LOVE YOU -->
+        <section class="story-card card-hidden-next" data-step="4">
+            <div class="w-full bg-gradient-to-br from-[#E0115F] to-[#FF1493] p-6 rounded-3xl shadow-xl text-white">
+                <span class="text-xs font-bold text-pink-200 uppercase">🌹 Chapter 4</span>
+                <h3 class="text-lg font-bold font-serif my-2">Why I Love You</h3>
+                <p class="text-xs opacity-95 leading-relaxed mb-4 italic">
+                    "Our connection feels as if we were already together in another lifetime. It’s a bond I could never find with anyone else. It wasn’t just love at first sight—it was recognizing what was already mine the very moment I saw you."
+                </p>
+                <span class="text-[10px] uppercase font-bold text-pink-200 block mb-2">Things I don't want to ever miss:</span>
+                <div class="flex flex-wrap gap-2 text-[11px] font-medium text-gray-800">
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">😂 Your Laugh</span>
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">❤️ Your Kindness</span>
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">✨ Your Smile</span>
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">🙅 Your No's</span>
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">😜 "Odidu Olunga"</span>
+                    <span class="bg-white/90 px-3 py-1 rounded-full shadow-sm">🙈 Your "Mudiyathu"</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAPTER 5: LITTLE THINGS ABOUT SHARU -->
+        <section class="story-card card-hidden-next" data-step="5">
+            <div class="w-full bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-pink-200 text-left space-y-3">
+                <span class="text-xs font-bold text-[#FF1493] uppercase">📂 Chapter 5</span>
+                <h3 class="text-base font-bold text-[#C71585] font-serif border-b border-pink-100 pb-1">Little Things About My Sharu Ma</h3>
+                
+                <div>
+                    <span class="text-[10px] uppercase font-bold text-gray-400">Favorite Memory</span>
+                    <p class="text-[11px] text-gray-700 mt-1 leading-relaxed italic">
+                        "Our very first meeting in that supermarket—walking a few steps behind you and just watching how incredibly cute you were. I couldn't take my eyes off you for even a second. Gazing into your eyes, all I wanted to do was tell you how much I liked you. Those eyes still draw me in, making me fall deeper and deeper every day."
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <div class="bg-pink-50 p-2 rounded-xl border border-pink-100">
+                        <span class="text-[9px] uppercase font-bold text-[#FF1493]">⛪ Favorite Place</span>
+                        <p class="text-xs font-bold text-gray-800">Church</p>
+                    </div>
+                    <div class="bg-pink-50 p-2 rounded-xl border border-pink-100">
+                        <span class="text-[9px] uppercase font-bold text-[#FF1493]">🍗 Favorite Food</span>
+                        <p class="text-xs font-bold text-gray-800">KFC & Ice Cream</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAPTER 6: FOREVER & ALWAYS -->
+        <section class="story-card card-hidden-next" data-step="6">
+            <div class="w-full bg-gradient-to-b from-white to-pink-50 border border-pink-200 p-6 rounded-3xl shadow-xl text-center space-y-3">
+                <span class="text-4xl">♾️</span>
+                <span class="text-xs font-bold text-pink-600 uppercase block">Chapter 6</span>
+                <h4 class="text-lg font-bold text-[#C71585] font-serif">To Be Continued...</h4>
+                
+                <p class="text-xs text-gray-700 leading-relaxed font-medium px-2">
+                    "This chapter doesn't end here... there is so much more left to go! I want to fall for you more and more every single day."
+                </p>
+
+                <div class="pt-4 border-t border-pink-200/80">
+                    <p class="text-sm font-serif font-bold text-[#FF1493]">"I love you forever, Sharu Ma! ❤️"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOTTOM DRONE NAVIGATION CONTROLS -->
+        <div class="absolute bottom-6 inset-x-0 px-6 flex justify-between items-center z-40">
+            <button id="prev-btn" class="bg-white/80 backdrop-blur-md text-pink-600 font-bold px-4 py-2.5 rounded-full text-xs shadow-md border border-pink-200 opacity-40 pointer-events-none active:scale-95 transition-all">
+                ← Back
+            </button>
+            <button id="next-btn" class="bg-gradient-to-r from-[#FF1493] to-[#C71585] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg active:scale-95 transition-transform flex items-center gap-1">
+                Next Chapter ➔
+            </button>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
