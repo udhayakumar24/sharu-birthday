@@ -117,12 +117,12 @@
 
     <!-- 1. DRONE CAMERA GATEWAY OVERLAY -->
     <div id="unlock-overlay" class="fixed inset-0 z-50 bg-[#0B0205] text-white transition-opacity duration-1000 overflow-hidden">
-        <div class="absolute top-6 inset-x-0 text-center z-10 px-4">
+        <div class="absolute top-6 inset-x-0 text-center z-10 px-4 pointer-events-none">
             <span class="text-[10px] uppercase tracking-[0.3em] text-pink-300 font-semibold block">A Special Gift For Sharu Ma</span>
             <h2 class="text-lg font-serif text-rose-200 mt-0.5 font-bold">From Your Kutty Paiyan</h2>
         </div>
 
-        <div id="drone-target" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm h-[50vh] max-h-[380px] cursor-pointer origin-center transition-transform duration-300">
+        <div id="drone-target" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm h-[50vh] max-h-[380px] cursor-pointer origin-center transition-transform duration-300 z-20">
             <div class="w-full h-full rounded-3xl overflow-hidden relative shadow-2xl border border-pink-500/40">
                 <img src="udhaya.png" class="w-full h-full object-cover" alt="Udhaya" onerror="this.onerror=null; this.src='udhaya.jpg';">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
@@ -135,7 +135,7 @@
             </div>
         </div>
 
-        <div class="absolute bottom-12 inset-x-0 text-center z-10 px-4">
+        <div class="absolute bottom-12 inset-x-0 text-center z-10 px-4 pointer-events-none">
             <p class="text-[10px] text-pink-300/80 uppercase tracking-widest animate-pulse">✦ Touch the glowing heart above ✦</p>
         </div>
     </div>
@@ -328,5 +328,4 @@
         <div class="bg-white p-6 rounded-3xl shadow-2xl border-2 border-pink-300 text-center max-w-xs w-full transform scale-90 transition-transform duration-300" id="smile-card">
             <span class="text-3xl block mb-2 animate-bounce">💌</span>
             <h4 class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-2">Message from Kutty Paiyan</h4>
-            <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-3">
-                <!-- Dynamically injected
+            <p id="smile-text" class="text-sm font-serif font-bold text-gray-800 leading-relaxed my-
