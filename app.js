@@ -99,10 +99,13 @@ function openGateway(e) {
     }, 1000);
 }
 
-// Attach both click and touchstart events directly for immediate mobile response
+// Attach touchstart without { passive: true } to preserve user gesture execution for Chrome
 if (unlockOverlay) {
     unlockOverlay.addEventListener('click', openGateway);
-    unlockOverlay.addEventListener('touchstart', openGateway, { passive: true });
+    unlockOverlay.addEventListener('touchstart', (e) => {
+        // e.preventDefault() here stops ghost clicks while preserving the play gesture
+        openGateway(e);
+    });
 }
 
 if (musicIndicator) {
