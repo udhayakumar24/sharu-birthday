@@ -378,22 +378,21 @@
     <p class="text-xs text-gray-500 mb-4">Tap the flame or blow into your mic to extinguish the candle!</p>
     
     <!-- Cake & Flame Display -->
-    <div id="cake-container" class="relative cursor-pointer my-4 py-2 flex flex-col items-center justify-center">
-        <!-- Flame Element -->
-        <div id="candle-flame" class="text-6xl animate-pulse transition-all duration-500 transform hover:scale-110">
-            🔥
-        </div>
-        <!-- Smoke (Hidden initially) -->
-        <div id="candle-smoke" class="text-6xl hidden opacity-0 transition-opacity duration-700">
-            💨
-        </div>
-        <!-- Added scale-125 or scale-150 to enlarge the whole element -->
-<div id="cake-container" class="relative cursor-pointer my-8 py-4 flex flex-col items-center justify-center transform scale-125 sm:scale-150 transition-all">
-    <div id="candle-flame" class="text-5xl animate-pulse">🔥</div>
-    <div id="candle-smoke" class="text-3xl hidden opacity-0">💨</div>
-    <div class="text-7xl -mt-3">🎂</div>
+<div id="cake-container" class="relative cursor-pointer my-6 py-2 flex flex-col items-center justify-center transform active:scale-95 transition-transform">
+    <!-- Flame Element (Increased from text-4xl to text-6xl) -->
+    <div id="candle-flame" class="text-6xl animate-pulse transition-all duration-500 transform hover:scale-110">
+        🔥
+    </div>
+    <!-- Smoke (Increased from text-2xl to text-4xl) -->
+    <div id="candle-smoke" class="text-4xl hidden opacity-0 transition-opacity duration-700">
+        💨
+    </div>
+    <!-- Candle Body & Cake (Increased from text-6xl to text-8xl or text-9xl) -->
+    <div class="text-8xl -mt-4">
+        🎂
+    </div>
 </div>
-    
+ 
     <!-- Status Message -->
     <p id="wish-status" class="text-xs font-semibold text-rose-500 mt-2">
         🕯️ Candle is lit...
