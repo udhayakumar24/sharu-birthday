@@ -156,6 +156,11 @@ function updateDroneView() {
             nextBtn.innerText = "Next Chapter ➔";
         }
     }
+
+    // Trigger confetti burst when user hits Chapter 6
+    if (currentStep === 6) {
+        triggerConfetti();
+    }
 }
 
 if (nextBtn) {
@@ -284,7 +289,8 @@ function initScratchCard() {
     wishCanvas.addEventListener('touchend', () => isScratching = false);
     wishCanvas.addEventListener('touchmove', rub);
 }
-// --- LIVE TIME TOGETHER COUNTER ENGINE ---
+
+// --- 7. LIVE TIME TOGETHER COUNTER ENGINE ---
 const START_DATE = new Date('2023-07-19T00:00:00'); // 19th July 2023
 
 function updateCounter() {
@@ -312,10 +318,10 @@ function updateCounter() {
     secsEl.innerText = String(seconds).padStart(2, '0');
 }
 
-// Run immediately and tick every second
 updateCounter();
 setInterval(updateCounter, 1000);
-// --- AMBIENT NIGHT / GLOW TOGGLE LOGIC ---
+
+// --- 8. AMBIENT NIGHT / GLOW TOGGLE LOGIC ---
 function toggleTheme() {
     const body = document.body;
     const themeIcon = document.getElementById('theme-icon');
@@ -329,17 +335,15 @@ function toggleTheme() {
     }
 }
 
-// --- CELEBRATION CONFETTI TRIGGER ---
+// --- 9. CELEBRATION CONFETTI TRIGGER ---
 function triggerConfetti() {
     if (typeof confetti === 'function') {
-        // First burst
         confetti({
             particleCount: 80,
             spread: 70,
             origin: { y: 0.6 }
         });
         
-        // Optional second burst 250ms later for extra celebration effect
         setTimeout(() => {
             confetti({
                 particleCount: 50,
