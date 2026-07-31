@@ -613,3 +613,20 @@ function initDodgingGame() {
 
 // Call function when DOM loaded
 document.addEventListener('DOMContentLoaded', initDodgingGame);
+
+function openCard(cardNumber, reasonText) {
+  const modal = document.getElementById('proposal-modal');
+  const reasonDisplay = document.getElementById('selected-reason');
+
+  reasonDisplay.innerText = `Card #${cardNumber}: "${reasonText}"`;
+  modal.classList.remove('hidden');
+
+  if (navigator.vibrate) {
+    navigator.vibrate([80, 40, 80]);
+  }
+}
+
+function acceptProposal(message) {
+  alert(message);
+  document.getElementById('proposal-modal').classList.add('hidden');
+}
