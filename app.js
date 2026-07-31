@@ -366,4 +366,89 @@ function triggerConfetti() {
         }, 250);
     }
 }
-    
+    // --- 10. BLOW OUT THE CANDLE ENGINE ---
+let candleBlown = false;
+
+function extinguishCandle() {
+    if (candleBlown) return;
+    candleBlown = true;
+
+    triggerHaptic([50, 50, 100]);
+
+    const flame = document.getElementById('candle-flame');
+    const smoke = document.getElementById('candle-smoke');
+    const status = document.getElementById('wish-status');
+
+    if (flame) {
+        flame.classList.add('scale-0', 'opacity-0');
+        setTimeout(() => flame.style.display = 'none', 500);
+    }
+
+    if (smoke) {
+        smoke.classList.remove('hidden');
+        setTimeout(() => smoke.classList.remove('opacity-0'), 100);
+    }
+
+    if (status) {
+        status.innerText = "✨ Your wish is sent to the universe! Happy Birthday Sharu Ma! 🎉";
+        status.classList.replace('text-rose-500', 'text-emerald-600');
+    }
+
+    // Huge celebration confetti explosion
+    triggerConfetti();
+    setTimeout(triggerConfetti, 400);
+}
+
+// 1. Direct Tap / Touch Trigger
+const cakeContainer = document.getElementById('cake-container');
+if (cakeContainer) {
+    cakeContainer.addEventListener('click', extinguishCandle);
+    cakeContainer.addEventListener('touchstart', extinguishCandle, { passive: true });
+}
+
+// 2. Web Audio Microphone Blow Detector
+const micBtn = document.getElementById('mic-btn');
+if (micBtn) {
+    micBtn.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const microphone = audioContext.createMediaStreamSource(stream);
+            const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+            analyser.smoothingTimeConstant = 0.8;
+            analyser.fftSize = 1024;
+
+            microphone.connect(analyser);
+            analyser.connect(javascriptNode);
+            javascriptNode.connect(audioContext.destination);
+
+            micBtn.innerText = "🎙️ Listening... Blow now!";
+            micBtn.classList.add('bg-emerald-100', 'text-emerald-700');
+
+            javascriptNode.onaudioprocess = () => {
+                const array = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(array);
+                let values = 0;
+
+                for (let i = 0; i < array.length; i++) {
+                    values += array[i];
+                }
+
+                const average = values / array.length;
+
+                // Threshold check for blowing wind sound into mic
+                if (average > 45 && !candleBlown) {
+                    extinguishCandle();
+                    micBtn.innerText = "✨ Wish Granted!";
+                    stream.getTracks().forEach(track => track.stop()); // Stop mic recording
+                }
+            };
+        } catch (err) {
+            console.log("Mic access denied/unsupported:", err);
+            micBtn.innerText = "Tap the candle directly instead! 🕯️";
+        }
+    });
+}
+
