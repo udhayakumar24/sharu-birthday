@@ -52,7 +52,8 @@ if (sharuImg) {
         }
     };
 }
-// --- 3. GATEWAY DRONE UNLOCK ---
+
+// --- 3. GATEWAY DRONE UNLOCK ENGINE ---
 const droneTarget = document.getElementById('drone-target');
 const unlockOverlay = document.getElementById('unlock-overlay');
 const storyboard = document.getElementById('storyboard');
@@ -61,50 +62,30 @@ const musicIndicator = document.getElementById('music-indicator');
 
 let gatewayTriggered = false;
 
-droneTarget.addEventListener('click', () => {
+function openGateway(e) {
     if (gatewayTriggered) return;
     gatewayTriggered = true;
-    triggerHaptic(50); // Stronger haptic feedback on opening unlock
+    
+    triggerHaptic([40, 30, 60]); 
 
-    requestAnimationFrame(() => {
+    if (droneTarget) {
         droneTarget.classList.add('drone-zoom-active');
-    });
+    }
 
-    setTimeout(() => {
-        bgMusic.play().then(() => {
-            musicIndicator.innerText = "🎵 Music Playing...";
-        }).catch(err => {
-            musicIndicator.innerText = "🔇 Tap to Play Song";
-        });
-    }, 150);
-
-    setTimeout(() => {
-        unlockOverlay.style.opacity = '0';
-        setTimeout(() => {
-            unlockOverlay.style.display = 'none';
-            storyboard.classList.remove('opacity-0');
-            initScratchCard();
-        }, 800);
-    }, 1200);
-});
-
-if (musicIndicator) {
-    musicIndicator.addEventListener('click', (e) => {
-        e.stopPropagation();
-        triggerHaptic(15);
-        if (bgMusic) {
-            if (bgMusic.paused) {
-                bgMusic.play().then(() => {
-                    musicIndicator.innerText = "🎵 Music Playing...";
-                });
-            } else {
-                bgMusic.pause();
-                musicIndicator.innerText = "🔇 Music Paused";
-            }
+    // Direct user-driven audio trigger (Bypasses browser autoplay restrictions)
+    if (bgMusic) {
+        bgMusic.currentTime = 0; // Start from beginning
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                if (musicIndicator) musicIndicator.innerText = "🎵 Music Playing...";
+            }).catch(err => {
+                console.log("Audio play blocked by browser:", err);
+                if (musicIndicator) musicIndicator.innerText = "🔇 Tap to Play Song";
+            });
         }
-    });
-}
-
+    }
 
     setTimeout(() => {
         if (unlockOverlay) {
