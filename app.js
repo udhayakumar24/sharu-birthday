@@ -177,7 +177,50 @@ if (prevBtn) {
     });
 }
 
-// --- 5. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
+// --- 5. DAILY SMILE ENVELOPE MODAL ENGINE ---
+const smileQuotes = [
+    "Did you know? Your smile literally resets my whole bad day.",
+    "Warning: Kutty Paiyan is currently thinking about you.",
+    "You're still my favorite notification.",
+    "Hey thoongumoonji, innaikum thoongidatha 😴🤪",
+    "Hey patts papa 🤪😍",
+    "Hey cutie pie, my cupy cake. 😍😋",
+    "Reminder: You owe Kutty Paiyan one big hug! 🤗",
+    "Enna paatha udane siripu varudha? 😜❤️"
+];
+
+const smileBtn = document.getElementById('smile-btn');
+const smileModal = document.getElementById('smile-modal');
+const smileCard = document.getElementById('smile-card');
+const smileText = document.getElementById('smile-text');
+const closeSmileBtn = document.getElementById('close-smile-btn');
+
+if (smileBtn && smileModal) {
+    smileBtn.addEventListener('click', () => {
+        triggerHaptic(25);
+        const randomQuote = smileQuotes[Math.floor(Math.random() * smileQuotes.length)];
+        smileText.innerText = `"${randomQuote}"`;
+        
+        smileModal.classList.remove('opacity-0', 'pointer-events-none');
+        smileCard.classList.remove('scale-90');
+        smileCard.classList.add('scale-100');
+    });
+
+    closeSmileBtn.addEventListener('click', () => {
+        triggerHaptic(15);
+        smileModal.classList.add('opacity-0', 'pointer-events-none');
+        smileCard.classList.remove('scale-100');
+        smileCard.classList.add('scale-90');
+    });
+
+    smileModal.addEventListener('click', (e) => {
+        if (e.target === smileModal) {
+            closeSmileBtn.click();
+        }
+    });
+}
+
+// --- 6. SCRATCH CARD MECHANICS WITH THROTTLED HAPTICS ---
 let scratchInited = false;
 function initScratchCard() {
     if (scratchInited) return;
